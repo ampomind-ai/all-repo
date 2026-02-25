@@ -1,0 +1,33 @@
+{
+  "name": "@scriblmotion/core",
+  "version": "1.0.0",
+  "description": "Scriblmotion Core Engine — deterministic 2D animation runtime",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "scriblmotion",
+    "animation",
+    "dsl",
+    "engine"
+  ],
+  "author": "AmpoMind",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/katex": "^0.16.8",
+    "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "katex": "^0.16.33"
+  }
+}

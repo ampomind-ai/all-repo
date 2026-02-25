@@ -1,0 +1,347 @@
+{
+    "version": "1.0",
+    "scene": {
+        "id": "shapes-demo",
+        "width": 800,
+        "height": 500,
+        "duration": 8000,
+        "background": "#0f0f1a",
+        "coordinateSystem": "screen",
+        "frameRate": 60,
+        "physics": false,
+        "audio": []
+    },
+    "layers": [
+        {
+            "id": "bg-layer",
+            "type": "svg",
+            "zIndex": 0,
+            "entities": [
+                {
+                    "id": "bg-circle-1",
+                    "type": "shape",
+                    "position": {
+                        "x": 400,
+                        "y": 250
+                    },
+                    "opacity": 0.15,
+                    "styles": {
+                        "shape": "circle",
+                        "radius": 180,
+                        "fill": "#6366f1"
+                    },
+                    "animations": [
+                        {
+                            "id": "bg-pulse",
+                            "property": "opacity",
+                            "easing": "easeInOutSine",
+                            "duration": 4000,
+                            "loops": -1,
+                            "keyframes": [
+                                {
+                                    "time": 0,
+                                    "value": 0.1
+                                },
+                                {
+                                    "time": 2000,
+                                    "value": 0.3
+                                },
+                                {
+                                    "time": 4000,
+                                    "value": 0.1
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "bg-circle-2",
+                    "type": "shape",
+                    "position": {
+                        "x": 600,
+                        "y": 150
+                    },
+                    "opacity": 0.1,
+                    "styles": {
+                        "shape": "circle",
+                        "radius": 120,
+                        "fill": "#8b5cf6"
+                    },
+                    "animations": [
+                        {
+                            "id": "bg-pulse-2",
+                            "property": "opacity",
+                            "easing": "easeInOutSine",
+                            "duration": 5000,
+                            "loops": -1,
+                            "keyframes": [
+                                {
+                                    "time": 0,
+                                    "value": 0.05
+                                },
+                                {
+                                    "time": 2500,
+                                    "value": 0.2
+                                },
+                                {
+                                    "time": 5000,
+                                    "value": 0.05
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "main-layer",
+            "type": "svg",
+            "zIndex": 1,
+            "entities": [
+                {
+                    "id": "title-text",
+                    "type": "text",
+                    "position": {
+                        "x": 400,
+                        "y": 80
+                    },
+                    "opacity": 0,
+                    "styles": {
+                        "content": "ScriblMotion Engine v1.0",
+                        "fontSize": 32,
+                        "fontFamily": "Inter, system-ui, sans-serif",
+                        "fill": "#e4e4e7"
+                    },
+                    "animations": [
+                        {
+                            "id": "title-fade-in",
+                            "property": "opacity",
+                            "easing": "easeOutCubic",
+                            "duration": 1500,
+                            "keyframes": [
+                                {
+                                    "time": 0,
+                                    "value": 0
+                                },
+                                {
+                                    "time": 1500,
+                                    "value": 1
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "bouncing-square",
+                    "type": "shape",
+                    "position": {
+                        "x": 150,
+                        "y": 200
+                    },
+                    "styles": {
+                        "shape": "rect",
+                        "width": 80,
+                        "height": 80,
+                        "fill": "#22d3ee",
+                        "stroke": "#06b6d4",
+                        "strokeWidth": 2
+                    },
+                    "animations": [
+                        {
+                            "id": "square-bounce-y",
+                            "property": "position.y",
+                            "easing": "bounce",
+                            "duration": 2000,
+                            "loops": -1,
+                            "keyframes": [
+                                {
+                                    "time": 0,
+                                    "value": 200
+                                },
+                                {
+                                    "time": 1000,
+                                    "value": 350
+                                },
+                                {
+                                    "time": 2000,
+                                    "value": 200
+                                }
+                            ]
+                        },
+                        {
+                            "id": "square-rotate",
+                            "property": "rotation",
+                            "easing": "linear",
+                            "duration": 4000,
+                            "loops": -1,
+                            "keyframes": [
+                                {
+                                    "time": 0,
+                                    "value": 0
+                                },
+                                {
+                                    "time": 4000,
+                                    "value": 360
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "pulsing-circle",
+                    "type": "shape",
+                    "position": {
+                        "x": 400,
+                        "y": 280
+                    },
+                    "styles": {
+                        "shape": "circle",
+                        "radius": 50,
+                        "fill": "#f472b6",
+                        "stroke": "#ec4899",
+                        "strokeWidth": 2
+                    },
+                    "animations": [
+                        {
+                            "id": "circle-scale-x",
+                            "property": "scale.x",
+                            "easing": "easeInOutSine",
+                            "duration": 3000,
+                            "loops": -1,
+                            "keyframes": [
+                                {
+                                    "time": 0,
+                                    "value": 1
+                                },
+                                {
+                                    "time": 1500,
+                                    "value": 1.4
+                                },
+                                {
+                                    "time": 3000,
+                                    "value": 1
+                                }
+                            ]
+                        },
+                        {
+                            "id": "circle-scale-y",
+                            "property": "scale.y",
+                            "easing": "easeInOutSine",
+                            "duration": 3000,
+                            "loops": -1,
+                            "keyframes": [
+                                {
+                                    "time": 0,
+                                    "value": 1
+                                },
+                                {
+                                    "time": 1500,
+                                    "value": 1.4
+                                },
+                                {
+                                    "time": 3000,
+                                    "value": 1
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "sliding-diamond",
+                    "type": "shape",
+                    "position": {
+                        "x": 650,
+                        "y": 280
+                    },
+                    "rotation": 45,
+                    "styles": {
+                        "shape": "rect",
+                        "width": 60,
+                        "height": 60,
+                        "fill": "#a78bfa",
+                        "stroke": "#8b5cf6",
+                        "strokeWidth": 2
+                    },
+                    "animations": [
+                        {
+                            "id": "diamond-slide-x",
+                            "property": "position.x",
+                            "easing": "easeInOutQuad",
+                            "duration": 3000,
+                            "loops": -1,
+                            "keyframes": [
+                                {
+                                    "time": 0,
+                                    "value": 550
+                                },
+                                {
+                                    "time": 1500,
+                                    "value": 700
+                                },
+                                {
+                                    "time": 3000,
+                                    "value": 550
+                                }
+                            ]
+                        },
+                        {
+                            "id": "diamond-fade",
+                            "property": "opacity",
+                            "easing": "easeInOutSine",
+                            "duration": 3000,
+                            "loops": -1,
+                            "keyframes": [
+                                {
+                                    "time": 0,
+                                    "value": 0.5
+                                },
+                                {
+                                    "time": 1500,
+                                    "value": 1
+                                },
+                                {
+                                    "time": 3000,
+                                    "value": 0.5
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "subtitle-text",
+                    "type": "text",
+                    "position": {
+                        "x": 400,
+                        "y": 440
+                    },
+                    "opacity": 0,
+                    "styles": {
+                        "content": "DSL → Parse → Validate → Animate → Render",
+                        "fontSize": 16,
+                        "fontFamily": "monospace",
+                        "fill": "#a1a1aa"
+                    },
+                    "animations": [
+                        {
+                            "id": "subtitle-fade-in",
+                            "property": "opacity",
+                            "easing": "easeOutCubic",
+                            "duration": 2000,
+                            "delay": 1000,
+                            "keyframes": [
+                                {
+                                    "time": 0,
+                                    "value": 0
+                                },
+                                {
+                                    "time": 2000,
+                                    "value": 0.8
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

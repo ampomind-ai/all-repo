@@ -1,0 +1,31 @@
+{
+  "name": "@scriblmotion/canvas",
+  "version": "1.0.0",
+  "description": "Scriblmotion Canvas Renderer",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "scriblmotion",
+    "canvas",
+    "renderer"
+  ],
+  "author": "AmpoMind",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@scriblmotion/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

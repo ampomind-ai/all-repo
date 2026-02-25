@@ -1,0 +1,34 @@
+{
+  "name": "@scriblmotion/svg",
+  "version": "1.0.0",
+  "description": "Scriblmotion SVG Renderer",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "scriblmotion",
+    "svg",
+    "renderer"
+  ],
+  "author": "AmpoMind",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@scriblmotion/core": "workspace:*",
+    "katex": "^0.16.33",
+    "mathjs": "^15.1.1"
+  },
+  "devDependencies": {
+    "@types/katex": "^0.16.8",
+    "typescript": "^5.7.0"
+  }
+}

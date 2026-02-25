@@ -1,0 +1,77 @@
+@import "tailwindcss";
+@import "ui/src/styles/globals.css";
+@source "../../../packages/ui/src";
+@source "../../../packages/scriblmotion-svg/src";
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-funnel-display), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+
+  /* Global macro: Map legacy dark-mode 'zinc' utilities to responsive semantic themes */
+  --color-zinc-50: var(--background);
+  --color-zinc-100: var(--foreground);
+  --color-zinc-200: var(--foreground);
+  --color-zinc-300: var(--muted-foreground);
+  --color-zinc-400: var(--muted-foreground);
+  --color-zinc-500: var(--muted-foreground);
+  --color-zinc-600: var(--muted-foreground);
+  --color-zinc-700: var(--border);
+  --color-zinc-800: var(--border);
+  --color-zinc-900: var(--card);
+  --color-zinc-950: var(--background);
+}
+
+@layer base {
+  :root {
+    /* Surface levels — mapped to theme variables for light/dark mode */
+    --surface-0: var(--background);
+    --surface-1: var(--background);
+    --surface-2: var(--card);
+    --surface-3: var(--muted);
+    --surface-border: var(--border);
+  }
+}
+
+/* ── Sleek scrollbars (outside @layer for full specificity) ── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(113, 113, 122, 0.25) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(113, 113, 122, 0.3);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(113, 113, 122, 0.5);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Fade edges on scrollable areas */
+[class*="overflow-y-auto"],
+[class*="overflow-y-scroll"] {
+  mask-image: linear-gradient(to bottom,
+      transparent 0%,
+      black 3%,
+      black 97%,
+      transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom,
+      transparent 0%,
+      black 3%,
+      black 97%,
+      transparent 100%);
+}
