@@ -246,37 +246,160 @@ export class SVGRenderer extends Renderer {
         return g;
     }
 
-    private createButtonElement(_entity: EngineEntity): SVGElement {
+    private createButtonElement(entity: EngineEntity): SVGElement {
         const g = document.createElementNS(SVG_NS, 'g');
         g.setAttribute('class', 'scribl-button');
 
-        const bg = document.createElementNS(SVG_NS, 'rect');
-        bg.setAttribute('class', 'btn-bg');
-        g.appendChild(bg);
+        const fo = document.createElementNS(SVG_NS, 'foreignObject');
+        fo.setAttribute('class', 'btn-container');
+        g.appendChild(fo);
 
-        const label = document.createElementNS(SVG_NS, 'text');
-        label.setAttribute('class', 'btn-label');
-        g.appendChild(label);
+        const btn = document.createElement('button');
+        btn.className = 'scribl-native-btn';
+        btn.style.width = '100%';
+        btn.style.height = '100%';
+        btn.style.boxSizing = 'border-box';
+        btn.style.border = 'none';
+        btn.style.borderRadius = '8px';
+        btn.style.cursor = 'pointer';
+        btn.style.fontFamily = 'Inter, system-ui, sans-serif';
+        btn.style.fontWeight = '600';
+        btn.style.fontSize = '14px';
+        btn.style.color = '#ffffff';
+        btn.style.background = 'linear-gradient(135deg, #6366f1, #8b5cf6)';
+        btn.style.boxShadow = '0 2px 8px rgba(99, 102, 241, 0.35)';
+        btn.style.transition = 'all 0.15s ease';
+        btn.style.outline = 'none';
+        btn.style.letterSpacing = '0.02em';
 
+        btn.addEventListener('mouseenter', () => {
+            btn.style.transform = 'translateY(-1px)';
+            btn.style.boxShadow = '0 4px 16px rgba(99, 102, 241, 0.5)';
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'translateY(0)';
+            btn.style.boxShadow = '0 2px 8px rgba(99, 102, 241, 0.35)';
+        });
+        btn.addEventListener('mousedown', () => {
+            btn.style.transform = 'scale(0.97)';
+        });
+        btn.addEventListener('mouseup', () => {
+            btn.style.transform = 'translateY(-1px)';
+        });
+
+        btn.addEventListener('click', () => {
+            if (this._eventBus) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (this._eventBus as any).emit('entity:click', {
+                    entityId: entity.id,
+                    x: entity.position.x,
+                    y: entity.position.y,
+                });
+            }
+        });
+
+        // Prevent SVG pointer events from interfering
+        fo.addEventListener('pointerdown', e => e.stopPropagation());
+
+        fo.appendChild(btn);
         return g;
     }
 
-    private createSliderElement(_entity: EngineEntity): SVGElement {
+    private createSliderElement(entity: EngineEntity): SVGElement {
         const g = document.createElementNS(SVG_NS, 'g');
         g.setAttribute('class', 'scribl-slider');
 
-        const track = document.createElementNS(SVG_NS, 'rect');
-        track.setAttribute('class', 'slider-track');
-        g.appendChild(track);
+        const fo = document.createElementNS(SVG_NS, 'foreignObject');
+        fo.setAttribute('class', 'slider-container');
+        g.appendChild(fo);
 
-        const fill = document.createElementNS(SVG_NS, 'rect');
-        fill.setAttribute('class', 'slider-fill');
-        g.appendChild(fill);
+        const wrapper = document.createElement('div');
+        wrapper.style.width = '100%';
+        wrapper.style.height = '100%';
+        wrapper.style.display = 'flex';
+        wrapper.style.alignItems = 'center';
 
-        const handle = document.createElementNS(SVG_NS, 'circle');
-        handle.setAttribute('class', 'slider-handle');
-        g.appendChild(handle);
+        const input = document.createElement('input');
+        input.type = 'range';
+        input.className = 'scribl-native-slider';
+        input.style.width = '100%';
+        input.style.height = '6px';
+        input.style.appearance = 'none';
+        input.style.background = 'transparent';
+        input.style.cursor = 'pointer';
+        input.style.outline = 'none';
+        input.style.margin = '0';
 
+        // Inject scoped CSS for the range thumb and track via a <style> tag 
+        const styleId = `scribl-slider-style-${entity.id}`;
+        if (!document.getElementById(styleId)) {
+            const style = document.createElement('style');
+            style.id = styleId;
+            style.textContent = `
+                .scribl-native-slider::-webkit-slider-runnable-track {
+                    height: 6px;
+                    border-radius: 3px;
+                    background: #27272a;
+                }
+                .scribl-native-slider::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    background: #ffffff;
+                    border: 2px solid #38bdf8;
+                    box-shadow: 0 2px 8px rgba(56, 189, 248, 0.4);
+                    margin-top: -7px;
+                    cursor: grab;
+                    transition: box-shadow 0.15s ease, transform 0.1s ease;
+                }
+                .scribl-native-slider::-webkit-slider-thumb:hover {
+                    box-shadow: 0 3px 12px rgba(56, 189, 248, 0.6);
+                    transform: scale(1.1);
+                }
+                .scribl-native-slider::-webkit-slider-thumb:active {
+                    cursor: grabbing;
+                    transform: scale(0.95);
+                }
+                .scribl-native-slider::-moz-range-track {
+                    height: 6px;
+                    border-radius: 3px;
+                    background: #27272a;
+                    border: none;
+                }
+                .scribl-native-slider::-moz-range-thumb {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    background: #ffffff;
+                    border: 2px solid #38bdf8;
+                    box-shadow: 0 2px 8px rgba(56, 189, 248, 0.4);
+                    cursor: grab;
+                }
+                .scribl-native-slider::-moz-range-thumb:active {
+                    cursor: grabbing;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        input.addEventListener('input', () => {
+            if (this._eventBus) {
+                const val = parseFloat(input.value);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (this._eventBus as any).emit('ui:slider_change', {
+                    entityId: entity.id,
+                    value: val,
+                });
+            }
+        });
+
+        // Prevent SVG pointer events from interfering with native slider drag
+        fo.addEventListener('pointerdown', e => e.stopPropagation());
+
+        wrapper.appendChild(input);
+        fo.appendChild(wrapper);
         return g;
     }
 
@@ -536,70 +659,75 @@ export class SVGRenderer extends Renderer {
     // ── UI Entity Updaters ────────────────────────────────────────────────
 
     private updateButton(el: SVGElement, entity: EngineEntity): void {
-        const bg = el.querySelector('.btn-bg') as SVGRectElement | null;
-        const label = el.querySelector('.btn-label') as SVGTextElement | null;
-        if (!bg || !label) return;
+        const fo = el.querySelector('.btn-container') as SVGForeignObjectElement | null;
+        if (!fo) return;
 
         const w = (entity.styles['width'] as number) ?? 120;
         const h = (entity.styles['height'] as number) ?? 40;
-        const rx = (entity.styles['rx'] as number) ?? 6;
 
-        bg.setAttribute('x', String(-w / 2));
-        bg.setAttribute('y', String(-h / 2));
-        bg.setAttribute('width', String(w));
-        bg.setAttribute('height', String(h));
-        bg.setAttribute('rx', String(rx));
-        bg.setAttribute('fill', (entity.styles['fill'] as string) ?? '#6366f1');
-        if (entity.styles['stroke']) {
-            bg.setAttribute('stroke', entity.styles['stroke'] as string);
-            bg.setAttribute('stroke-width', String(entity.styles['strokeWidth'] ?? 1));
+        fo.setAttribute('x', String(-w / 2));
+        fo.setAttribute('y', String(-h / 2));
+        fo.setAttribute('width', String(w));
+        fo.setAttribute('height', String(h));
+
+        const btn = fo.querySelector('.scribl-native-btn') as HTMLButtonElement | null;
+        if (!btn) return;
+
+        btn.textContent = (entity.styles['label'] as string) ?? '';
+
+        // Allow DSL styling overrides
+        if (entity.styles['fill']) {
+            btn.style.background = entity.styles['fill'] as string;
         }
-
-        label.textContent = (entity.styles['label'] as string) ?? '';
-        label.setAttribute('text-anchor', 'middle');
-        label.setAttribute('dominant-baseline', 'central');
-        label.setAttribute('fill', (entity.styles['color'] as string) ?? '#ffffff');
-        label.setAttribute('font-size', String(entity.styles['fontSize'] ?? 14));
-        label.setAttribute('font-family', (entity.styles['fontFamily'] as string) ?? 'Inter, sans-serif');
-        label.setAttribute('font-weight', '600');
+        if (entity.styles['color']) {
+            btn.style.color = entity.styles['color'] as string;
+        }
+        if (entity.styles['fontSize']) {
+            btn.style.fontSize = `${entity.styles['fontSize']}px`;
+        }
+        if (entity.styles['fontFamily']) {
+            btn.style.fontFamily = entity.styles['fontFamily'] as string;
+        }
+        if (entity.styles['rx']) {
+            btn.style.borderRadius = `${entity.styles['rx']}px`;
+        }
+        if (entity.styles['stroke']) {
+            btn.style.border = `${entity.styles['strokeWidth'] ?? 1}px solid ${entity.styles['stroke']}`;
+        }
     }
 
     private updateSlider(el: SVGElement, entity: EngineEntity): void {
-        const track = el.querySelector('.slider-track') as SVGRectElement | null;
-        const fill = el.querySelector('.slider-fill') as SVGRectElement | null;
-        const handle = el.querySelector('.slider-handle') as SVGCircleElement | null;
-        if (!track || !fill || !handle) return;
+        const fo = el.querySelector('.slider-container') as SVGForeignObjectElement | null;
+        if (!fo) return;
 
         const w = (entity.styles['width'] as number) ?? 200;
-        const h = (entity.styles['trackHeight'] as number) ?? 6;
-        const value = (entity.config?.['value'] as number) ?? 0;
+        const foH = 28; // enough vertical space for thumb overflow
+
+        fo.setAttribute('x', String(-w / 2));
+        fo.setAttribute('y', String(-foH / 2));
+        fo.setAttribute('width', String(w));
+        fo.setAttribute('height', String(foH));
+
+        const input = fo.querySelector('.scribl-native-slider') as HTMLInputElement | null;
+        if (!input) return;
+
         const min = (entity.config?.['min'] as number) ?? 0;
         const max = (entity.config?.['max'] as number) ?? 100;
-        const pct = Math.max(0, Math.min(1, (value - min) / (max - min)));
+        const step = (entity.config?.['step'] as number) ?? 1;
+        const value = (entity.config?.['value'] as number) ?? min;
 
-        // Track
-        track.setAttribute('x', String(-w / 2));
-        track.setAttribute('y', String(-h / 2));
-        track.setAttribute('width', String(w));
-        track.setAttribute('height', String(h));
-        track.setAttribute('rx', String(h / 2));
-        track.setAttribute('fill', (entity.styles['trackColor'] as string) ?? '#3f3f46');
+        input.min = String(min);
+        input.max = String(max);
+        input.step = String(step);
 
-        // Fill
-        fill.setAttribute('x', String(-w / 2));
-        fill.setAttribute('y', String(-h / 2));
-        fill.setAttribute('width', String(w * pct));
-        fill.setAttribute('height', String(h));
-        fill.setAttribute('rx', String(h / 2));
-        fill.setAttribute('fill', (entity.styles['fillColor'] as string) ?? '#6366f1');
+        // Only update the input value if the user is NOT actively dragging
+        if (document.activeElement !== input) {
+            input.value = String(value);
+        }
 
-        // Handle
-        const handleX = -w / 2 + w * pct;
-        handle.setAttribute('cx', String(handleX));
-        handle.setAttribute('cy', '0');
-        handle.setAttribute('r', String((entity.styles['handleRadius'] as number) ?? 10));
-        handle.setAttribute('fill', (entity.styles['handleColor'] as string) ?? '#ffffff');
-        handle.style.cursor = 'grab';
+        // Apply custom accent color from DSL
+        const fillColor = (entity.styles['fillColor'] as string) ?? '#38bdf8';
+        input.style.accentColor = fillColor;
     }
 
     private updateTooltip(el: SVGElement, entity: EngineEntity): void {

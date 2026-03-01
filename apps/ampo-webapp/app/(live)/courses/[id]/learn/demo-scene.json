@@ -1,0 +1,338 @@
+{
+    "version": "1.0",
+    "scene": {
+        "id": "vector_demo",
+        "width": 550,
+        "height": 900,
+        "duration": 60000,
+        "background": "#0a0a0b",
+        "coordinateSystem": "cartesian",
+        "frameRate": 60,
+        "physics": true,
+        "gravity": {
+            "x": 0,
+            "y": 9.8
+        }
+    },
+    "layers": [
+        {
+            "id": "main_layer",
+            "type": "canvas",
+            "zIndex": 1,
+            "camera": {
+                "x": 0,
+                "y": 0,
+                "zoom": 1.0
+            },
+            "entities": [
+                {
+                    "id": "mechanic-title",
+                    "type": "shape",
+                    "position": {
+                        "x": 275,
+                        "y": 100
+                    },
+                    "styles": {
+                        "shape": "text",
+                        "text": "Neural Network Routing",
+                        "fontFamily": "Inter, sans-serif",
+                        "fontSize": 26,
+                        "fill": "#a8b1ff",
+                        "align": "center"
+                    }
+                },
+                {
+                    "id": "mechanic-subtitle",
+                    "type": "shape",
+                    "position": {
+                        "x": 275,
+                        "y": 140
+                    },
+                    "styles": {
+                        "shape": "text",
+                        "text": "Drag the blue hidden layers to guide the activation data",
+                        "fontFamily": "Inter, sans-serif",
+                        "fontSize": 14,
+                        "fill": "#64748b",
+                        "align": "center"
+                    }
+                },
+                {
+                    "id": "btn_spawn",
+                    "type": "button",
+                    "position": {
+                        "x": 175,
+                        "y": 180
+                    },
+                    "styles": {
+                        "label": "Drop Tensor Data",
+                        "fill": "#6366f1"
+                    },
+                    "interactions": [
+                        {
+                            "on": "click",
+                            "actions": [
+                                {
+                                    "type": "add_entity",
+                                    "payload": {
+                                        "layerId": "main_layer",
+                                        "entity": {
+                                            "type": "shape",
+                                            "position": {
+                                                "x": 275,
+                                                "y": 250
+                                            },
+                                            "draggable": true,
+                                            "styles": {
+                                                "shape": "circle",
+                                                "radius": 18,
+                                                "fill": "#ec4899",
+                                                "stroke": "#be185d",
+                                                "strokeWidth": 2
+                                            },
+                                            "physics": {
+                                                "type": "dynamic",
+                                                "restitution": 0.7,
+                                                "friction": 0.2
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "hidden_layer_1",
+                    "type": "shape",
+                    "position": {
+                        "x": 150,
+                        "y": 420
+                    },
+                    "rotation": 0.3,
+                    "draggable": true,
+                    "styles": {
+                        "shape": "rect",
+                        "width": 180,
+                        "height": 14,
+                        "fill": "#38bdf8",
+                        "cornerRadius": 7
+                    },
+                    "physics": {
+                        "type": "static"
+                    }
+                },
+                {
+                    "id": "hidden_layer_text_1",
+                    "type": "shape",
+                    "position": {
+                        "x": 150,
+                        "y": 420
+                    },
+                    "rotation": 0.3,
+                    "styles": {
+                        "shape": "text",
+                        "text": "Pool-1",
+                        "fontFamily": "Inter, sans-serif",
+                        "fontSize": 12,
+                        "fill": "#0f172a",
+                        "align": "center",
+                        "baseline": "middle"
+                    }
+                },
+                {
+                    "id": "hidden_layer_2",
+                    "type": "shape",
+                    "position": {
+                        "x": 400,
+                        "y": 620
+                    },
+                    "rotation": -0.3,
+                    "draggable": true,
+                    "styles": {
+                        "shape": "rect",
+                        "width": 180,
+                        "height": 14,
+                        "fill": "#38bdf8",
+                        "cornerRadius": 7
+                    },
+                    "physics": {
+                        "type": "static"
+                    }
+                },
+                {
+                    "id": "hidden_layer_text_2",
+                    "type": "shape",
+                    "position": {
+                        "x": 400,
+                        "y": 620
+                    },
+                    "rotation": -0.3,
+                    "styles": {
+                        "shape": "text",
+                        "text": "Conv-2",
+                        "fontFamily": "Inter, sans-serif",
+                        "fontSize": 12,
+                        "fill": "#0f172a",
+                        "align": "center",
+                        "baseline": "middle"
+                    }
+                },
+                {
+                    "id": "wall_left",
+                    "type": "shape",
+                    "position": {
+                        "x": 0,
+                        "y": 450
+                    },
+                    "styles": {
+                        "shape": "rect",
+                        "width": 20,
+                        "height": 900,
+                        "fill": "#1e293b"
+                    },
+                    "physics": {
+                        "type": "static"
+                    }
+                },
+                {
+                    "id": "wall_right",
+                    "type": "shape",
+                    "position": {
+                        "x": 550,
+                        "y": 450
+                    },
+                    "styles": {
+                        "shape": "rect",
+                        "width": 20,
+                        "height": 900,
+                        "fill": "#1e293b"
+                    },
+                    "physics": {
+                        "type": "static"
+                    }
+                },
+                {
+                    "id": "target_basket_base",
+                    "type": "shape",
+                    "position": {
+                        "x": 275,
+                        "y": 800
+                    },
+                    "styles": {
+                        "shape": "rect",
+                        "width": 160,
+                        "height": 15,
+                        "fill": "#10b981",
+                        "cornerRadius": 2
+                    },
+                    "physics": {
+                        "type": "static"
+                    }
+                },
+                {
+                    "id": "target_basket_left",
+                    "type": "shape",
+                    "position": {
+                        "x": 200,
+                        "y": 740
+                    },
+                    "rotation": 0.2,
+                    "styles": {
+                        "shape": "rect",
+                        "width": 15,
+                        "height": 120,
+                        "fill": "#10b981",
+                        "cornerRadius": 2
+                    },
+                    "physics": {
+                        "type": "static"
+                    }
+                },
+                {
+                    "id": "target_basket_right",
+                    "type": "shape",
+                    "position": {
+                        "x": 350,
+                        "y": 740
+                    },
+                    "rotation": -0.2,
+                    "styles": {
+                        "shape": "rect",
+                        "width": 15,
+                        "height": 120,
+                        "fill": "#10b981",
+                        "cornerRadius": 2
+                    },
+                    "physics": {
+                        "type": "static"
+                    }
+                },
+                {
+                    "id": "target_text",
+                    "type": "shape",
+                    "position": {
+                        "x": 275,
+                        "y": 780
+                    },
+                    "styles": {
+                        "shape": "text",
+                        "text": "Output Goal",
+                        "fontFamily": "Inter, sans-serif",
+                        "fontSize": 16,
+                        "fill": "#059669",
+                        "align": "center"
+                    }
+                },
+                {
+                    "id": "decorative_glow",
+                    "type": "shape",
+                    "position": {
+                        "x": 275,
+                        "y": 750
+                    },
+                    "styles": {
+                        "shape": "circle",
+                        "radius": 40,
+                        "fill": "#34d399",
+                        "opacity": 0.1
+                    }
+                }
+            ],
+            "animations": [
+                {
+                    "id": "pulse_glow",
+                    "targetId": "decorative_glow",
+                    "property": "scale",
+                    "keyframes": [
+                        {
+                            "time": 0,
+                            "value": {
+                                "x": 1,
+                                "y": 1
+                            },
+                            "easing": "linear"
+                        },
+                        {
+                            "time": 2000,
+                            "value": {
+                                "x": 1.4,
+                                "y": 1.4
+                            },
+                            "easing": "easeInOutSine"
+                        },
+                        {
+                            "time": 4000,
+                            "value": {
+                                "x": 1,
+                                "y": 1
+                            },
+                            "easing": "easeInOutSine"
+                        }
+                    ],
+                    "loop": true
+                }
+            ]
+        }
+    ]
+}

@@ -93,6 +93,46 @@ export class Engine {
                 }
             }
         });
+        // Handle generic interactions (play, pause, seek) triggered by UI
+        this.eventBus.on('interaction:triggered', ({ action }) => {
+            switch (action.type) {
+                case 'play':
+                    this.play();
+                    break;
+                case 'pause':
+                    this.pause();
+                    break;
+                case 'seek': {
+                    const time = action.payload?.['time'];
+                    if (time !== undefined) {
+                        this.seek(time);
+                    }
+                    break;
+                }
+            }
+        });
+        // Handle native slider changes mapped to timeline seek
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        this.eventBus.on('ui:slider_change', ({ entityId, value }) => {
+            const entity = this.entityManager.get(entityId);
+            if (!entity)
+                return;
+            // Update the entity config so the state reflects the slider handle
+            if (!entity.config)
+                entity.config = {};
+            entity.config['value'] = value;
+            // If the slider is configured to link to the timeline
+            if (entity.config['linkedTimeline']) {
+                // Map the value [min, max] to timeline duration [0, duration]
+                const min = entity.config['min'] ?? 0;
+                const max = entity.config['max'] ?? 100;
+                if (max > min && this.activePayload) {
+                    const pct = (value - min) / (max - min);
+                    const targetTime = pct * this.activePayload.scene.duration;
+                    this.seek(targetTime);
+                }
+            }
+        });
         // ── Wire pointer interactions from GUI renderer ──────────────────
         this._renderer.setPointerCallbacks({
             onPointerDown: (x, y) => this.interactionSystem.handlePointerDown(x, y),

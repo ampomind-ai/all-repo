@@ -12,8 +12,9 @@ export function findKeyframePair(keyframes, time) {
     if (keyframes.length === 0)
         return null;
     const first = keyframes[0];
-    if (time <= first.time)
-        return null;
+    if (time <= first.time) {
+        return { from: first, to: first, t: 0 };
+    }
     const last = keyframes[keyframes.length - 1];
     if (time >= last.time) {
         return { from: last, to: last, t: 1 };
