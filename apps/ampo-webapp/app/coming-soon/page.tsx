@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import { Funnel_Display, Geist_Mono } from "next/font/google";
-import { Sparkles, Brain, Cpu, Globe, ArrowRight } from "lucide-react";
-import { Button, Input } from "ui";
+import { Sparkles, ArrowRight, Menu, X, Brain, Cpu, Globe } from "lucide-react";
+import Link from "next/link";
+import { Button } from "ui";
+import { SolanaGSAPDemo } from "../../components/SolanaGSAPDemo";
 
 const funnelDisplay = Funnel_Display({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700", "800"] });
 const geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -11,13 +13,30 @@ const geistMono = Geist_Mono({ subsets: ["latin"] });
 export default function ComingSoonPage() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
-      setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 3000);
-      setEmail("");
+    if (!email) return;
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (res.ok) {
+        setSubmitted(true);
+        setTimeout(() => setSubmitted(false), 3000);
+        setEmail("");
+      }
+    } catch (error) {
+      console.error("Waitlist error", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,21 +53,65 @@ export default function ComingSoonPage() {
       </div>
 
       {/* Navigation / Header */}
-      <header className="absolute top-0 left-0 right-0 p-8 flex justify-between items-center z-20">
+      <header className="absolute top-0 left-0 right-0 p-6 md:p-8 flex justify-between items-center z-50">
         <div className="flex items-center gap-3">
           <div className="size-10 rounded-xl bg-zinc-100 flex items-center justify-center p-1.5 shadow-[0_0_20px_rgba(34,211,238,0.2)] border border-cyan-500/20">
             <img src="/ampo-icon-logo.png" alt="Ampomind" className="w-full h-full object-contain" />
           </div>
           <span className={`${funnelDisplay.className} text-xl font-bold tracking-tight text-zinc-100`}>Ampo<span className="text-zinc-500">Mind</span></span>
         </div>
-        <div className="flex gap-4">
-          <Button variant="ghost" className="text-muted-foreground hover:text-foreground hidden sm:flex">Investor Relations</Button>
-          <Button variant="outline" className="border-zinc-700/50 hover:bg-zinc-800/50">Contact Us</Button>
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-4">
+          <Link href="/whitepaper">
+            <Button variant="ghost" className="text-zinc-400 hover:text-cyan-400 font-bold tracking-wide">Read Whitepaper</Button>
+          </Link>
+          <a href="https://t.me/tis_david" target="_blank" rel="noopener noreferrer">
+            <Button variant="ghost" className="text-muted-foreground hover:text-foreground">Developer Chat</Button>
+          </a>
+          <a href="https://x.com/CCrown_Orig" target="_blank" rel="noopener noreferrer">
+            <Button variant="ghost" className="text-muted-foreground hover:text-foreground">Developer X</Button>
+          </a>
+          <a href="https://x.com/@ampomindai" target="_blank" rel="noopener noreferrer">
+            <Button variant="outline" className="border-zinc-700/50 hover:bg-zinc-800/50">Ampomind X</Button>
+          </a>
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <div className="md:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-zinc-400 hover:text-zinc-100"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </Button>
         </div>
       </header>
 
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-zinc-950/95 backdrop-blur-xl md:hidden pt-24 px-6 pb-6 flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
+          <Link href="/whitepaper" onClick={() => setIsMobileMenuOpen(false)}>
+            <Button variant="ghost" className="w-full justify-start text-lg h-14 text-zinc-300 font-bold tracking-wide hover:text-cyan-400 hover:bg-zinc-900/50">Read Whitepaper</Button>
+          </Link>
+          <a href="https://t.me/tis_david" target="_blank" rel="noopener noreferrer" onClick={() => setIsMobileMenuOpen(false)}>
+            <Button variant="ghost" className="w-full justify-start text-lg h-14 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/50">Developer Chat (Telegram)</Button>
+          </a>
+          <a href="https://x.com/CCrown_Orig" target="_blank" rel="noopener noreferrer" onClick={() => setIsMobileMenuOpen(false)}>
+            <Button variant="ghost" className="w-full justify-start text-lg h-14 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/50">Developer X</Button>
+          </a>
+          <div className="mt-4 pt-4 border-t border-zinc-800">
+            <a href="https://x.com/@ampomindai" target="_blank" rel="noopener noreferrer" onClick={() => setIsMobileMenuOpen(false)}>
+              <Button variant="outline" className="w-full h-14 text-lg border-zinc-700/50 hover:bg-zinc-800/50 text-zinc-200">Follow Ampomind on X</Button>
+            </a>
+          </div>
+        </div>
+      )}
+
       {/* Main Content */}
-      <main className="relative z-10 w-full max-w-5xl mx-auto px-6 py-20 flex flex-col items-center text-center mt-12">
+      <main className="relative z-10 w-full max-w-5xl mx-auto px-6 pt-24 pb-20 flex flex-col items-center text-center mt-12">
 
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 backdrop-blur-md mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -57,18 +120,18 @@ export default function ComingSoonPage() {
         </div>
 
         {/* Hero Title */}
-        <h1 className={`${funnelDisplay.className} text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[1.05] text-zinc-100 mb-6 drop-shadow-2xl animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-150 fill-mode-both`}>
-          The Future of <br className="hidden md:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500">Active Learning.</span>
+        <h1 className={`${funnelDisplay.className} text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tighter leading-[1.05] text-zinc-100 mb-6 drop-shadow-2xl animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-150 fill-mode-both`}>
+          The Engine for <br className="hidden md:block" />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500">Active Intelligence.</span>
         </h1>
 
         {/* Subtitle */}
-        <p className="max-w-2xl text-lg md:text-xl text-zinc-400 leading-relaxed mb-12 font-medium animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-300 fill-mode-both">
-          Stop consuming. Start simulating. Ampomind is the category-defining platform blending AI course synthesis with autonomous research sandboxes.
+        <p className="max-w-2xl text-lg text-zinc-400 leading-relaxed mb-10 font-medium animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-300 fill-mode-both">
+          Stop passively consuming information. Start simulating it. Ampomind is the category-defining AI platform transforming complex knowledge into interactive sandboxes for creators, builders, and enterprises.
         </p>
 
         {/* Waitlist Form */}
-        <form onSubmit={handleSubmit} className="w-full max-w-md relative animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-500 fill-mode-both mb-24">
+        <form onSubmit={handleSubmit} className="w-full max-w-md relative animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-500 fill-mode-both">
           <div className="relative flex items-center p-1.5 rounded-2xl bg-zinc-900/50 border border-zinc-800 backdrop-blur-xl shadow-2xl focus-within:border-cyan-500/50 focus-within:ring-4 focus-within:ring-cyan-500/10 transition-all duration-300">
             <div className="pl-4 pr-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-500"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
@@ -79,17 +142,56 @@ export default function ComingSoonPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-transparent border-none text-[15px] text-zinc-100 placeholder:text-zinc-500 focus:outline-none h-12"
+              className="flex-1 bg-transparent border-none text-[15px] text-zinc-100 placeholder:text-zinc-500 focus:outline-none h-11"
             />
             <Button
               type="submit"
-              className="h-12 px-6 rounded-xl bg-zinc-100 text-zinc-900 hover:bg-white font-bold tracking-wide transition-all hover:scale-105 active:scale-95 group"
+              disabled={loading}
+              className="h-11 px-6 rounded-xl bg-zinc-100 text-zinc-900 hover:bg-white font-bold tracking-wide transition-all hover:scale-105 active:scale-95 group disabled:opacity-50 disabled:hover:scale-100"
             >
-              {submitted ? "Joined!" : "Request Access"}
-              {!submitted && <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />}
+              {loading ? "Joining..." : submitted ? "Joined!" : "Request Access"}
+              {!submitted && !loading && <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />}
             </Button>
           </div>
         </form>
+
+        {/* Interactive Demo Chat (Wide Horizontal Format) */}
+        <div className="w-full max-w-4xl mt-32 mb-20 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-700 fill-mode-both text-left">
+          <div className="flex flex-col gap-6">
+
+            {/* User Bubble */}
+            <div className="self-end bg-zinc-800/80 p-5 rounded-3xl border border-zinc-700/50 max-w-md rounded-tr-sm text-[15px] shadow-xl text-zinc-200">
+              Explain the math behind Solana's Proof of History (PoH). Make it interactive.
+            </div>
+
+            {/* AI Bubble (Horizontal Layout on Desktop) */}
+            <div className="self-start bg-cyan-950/20 p-6 md:p-8 rounded-[2rem] border border-cyan-500/20 w-full rounded-tl-sm shadow-[0_0_30px_rgba(6,182,212,0.05)] border-l-2 border-l-cyan-500 flex flex-col md:flex-row gap-8 items-center">
+
+              {/* Left Side: Explanatory Text */}
+              <div className="flex-1 self-start w-full">
+                <div className="font-bold text-cyan-400 flex items-center gap-3 mb-5">
+                  <div className="size-8 rounded-lg bg-cyan-500 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                    <Sparkles size={16} className="text-zinc-950" />
+                  </div>
+                  <span className={`${geistMono.className} tracking-tight text-lg`}>Ampomind Engine</span>
+                </div>
+                <p className="mb-4 text-[15px] leading-relaxed text-zinc-300">
+                  Solana uses a high-frequency Verifiable Delay Function (VDF), specifically SHA-256 running in a continuous loop, to create a verifiable clock for the blockchain.
+                </p>
+                <p className="text-[15px] leading-relaxed text-zinc-300">
+                  This removes the need for nodes to constantly poll each other for timestamps. Try running the embedded verification sequence below to see the continuous hashing in action.
+                </p>
+              </div>
+
+              {/* Right Side: Embedded Interactive Widget */}
+              <div className="w-full md:w-[320px] shrink-0 bg-zinc-950/80 border border-zinc-800/60 rounded-3xl overflow-hidden shadow-2xl relative">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-cyan-500/5 pointer-events-none" />
+                <SolanaGSAPDemo />
+              </div>
+
+            </div>
+          </div>
+        </div>
 
         {/* Value Props Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-700 fill-mode-both">
