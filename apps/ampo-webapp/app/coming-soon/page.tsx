@@ -149,7 +149,7 @@ export default function ComingSoonPage() {
               disabled={loading}
               className="h-11 px-6 rounded-xl bg-zinc-100 text-zinc-900 hover:bg-white font-bold tracking-wide transition-all hover:scale-105 active:scale-95 group disabled:opacity-50 disabled:hover:scale-100"
             >
-              {loading ? "Joining..." : submitted ? "Joined!" : "Request Access"}
+              {loading ? "Joining..." : submitted ? "Joined!" : "Join"}
               {!submitted && !loading && <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />}
             </Button>
           </div>
