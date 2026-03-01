@@ -131,7 +131,7 @@ export default function WhitepaperPage() {
                                 Go to Waiting List
                             </Button>
                         </Link>
-                        <a href="mailto:invest@ampomind.com">
+                        <a href="https://t.me/tis_david" target="_blank">
                             <Button variant="outline" className="border-zinc-700 font-bold px-8 py-6 rounded-xl hover:bg-zinc-800">
                                 Contact Founders
                             </Button>
